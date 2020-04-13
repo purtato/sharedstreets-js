@@ -394,13 +394,7 @@ export class LevelDB {
     db;
 
     constructor(directory) {
-        console.log("LEVELUPPER")
-        try {
-            this.db = levelup(leveldown(directory));
-        } catch (e) {
-            console.log("LEVELCATCHER")
-        }
-        console.log("LEVELDOWNER2")
+        this.db = levelup(leveldown(directory));
     }
 
     async get(key:string):Promise<any> {

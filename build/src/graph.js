@@ -45,7 +45,7 @@ const DEFAULT_SEARCH_RADIUS = 10;
 const MIN_CONFIDENCE = 0.5;
 const OPTIMIZE_GRAPH = true;
 const USE_LOCAL_CACHE = true;
-const SHST_GRAPH_CACHE_DIR = util_1.resolveHome('/tmp/cache/graphs/');
+const SHST_GRAPH_CACHE_DIR = util_1.resolveHome('/tmp/shst/cache/graphs/');
 function getOSRMDirectory() {
     const osrmPath = require.resolve('osrm');
     const osrmLibPath = path.dirname(osrmPath);
@@ -265,14 +265,7 @@ class PathCandidate {
 exports.PathCandidate = PathCandidate;
 class LevelDB {
     constructor(directory) {
-        console.log("LEVELUPPER");
-        try {
-            this.db = levelup(leveldown(directory));
-        }
-        catch (e) {
-            console.log("LEVELCATCHER");
-        }
-        console.log("LEVELDOWNER2");
+        this.db = levelup(leveldown(directory));
     }
     get(key) {
         return __awaiter(this, void 0, void 0, function* () {
