@@ -25,7 +25,7 @@
   },
   "scripts": {
     "pretest": "tsc",
-    "prepack": "rm -rf build && tsc && mkdir -p build/src/proto && cp src/proto/*.js build/src/proto/ && oclif-dev manifest",
+    "prepack": "npm i && rm -rf build && tsc && mkdir -p build/src/proto && cp src/proto/*.js build/src/proto/ && oclif-dev manifest",
     "test": "tsc && colortape build/test_core.js",
     "test-match": "tsc && colortape build/test_match.js",
     "test-graph": "tsc && colortape build/test_graph.js",
