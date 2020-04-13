@@ -45,7 +45,7 @@ const DEFAULT_SEARCH_RADIUS = 10;
 const MIN_CONFIDENCE = 0.5;
 const OPTIMIZE_GRAPH = true;
 const USE_LOCAL_CACHE = true;
-const SHST_GRAPH_CACHE_DIR = util_1.resolveHome('~/.shst/cache/graphs/');
+const SHST_GRAPH_CACHE_DIR = util_1.resolveHome('/tmp/cache/graphs/');
 function getOSRMDirectory() {
     const osrmPath = require.resolve('osrm');
     const osrmLibPath = path.dirname(osrmPath);
@@ -265,7 +265,14 @@ class PathCandidate {
 exports.PathCandidate = PathCandidate;
 class LevelDB {
     constructor(directory) {
-        this.db = levelup(leveldown(directory));
+        console.log("LEVELUPPER");
+        try {
+            this.db = levelup(leveldown(directory));
+        }
+        catch (e) {
+            console.log("LEVELCATCHER");
+        }
+        console.log("LEVELDOWNER2");
     }
     get(key) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -292,6 +299,11 @@ class LevelDB {
             catch (error) {
                 return null;
             }
+        });
+    }
+    close() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.db.close();
         });
     }
 }
@@ -336,6 +348,13 @@ class Graph {
         }
         // create id from tile path hash  
         this.id = uuidHash(this.graphMode + ' node-pair.sv1 ' + paths.join(" "));
+    }
+    cleanup() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.db) {
+                yield this.db.close();
+            }
+        });
     }
     createGraphXml() {
         return __awaiter(this, void 0, void 0, function* () {

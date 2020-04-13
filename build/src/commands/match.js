@@ -781,6 +781,7 @@ function matchLinesMem(params, lines, flags) {
             bar1.increment();
         }
         bar1.stop();
+        yield matcher.cleanup();
         let result = {};
         if (matchedLines && matchedLines.length) {
             result.matched = turfHelpers.featureCollection(matchedLines);
