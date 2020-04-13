@@ -1,11 +1,12 @@
 {
   "name": "sharedstreets",
-  "version": "0.14.0",
+  "version": "0.14.0-dev",
   "description": "SharedStreets, a 'digital commons' for the street",
-  "main": "src/index.ts",
+  "main": "build/src/index.js",
   "bin": {
     "shst": "./bin/run"
   },
+  "private": true,
   "engines": {
     "node": ">=10.0.0"
   },
