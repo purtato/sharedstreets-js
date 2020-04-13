@@ -685,7 +685,23 @@ enum MatchDirection {
   BEST
 }
 
-async function matchLines(outFile, params, lines, flags) {
+interface MatchResult {
+  matched?: turfHelpers.FeatureCollection<turfHelpers.LineString>
+  unmatched?: turfHelpers.FeatureCollection<turfHelpers.LineString>
+  invalid?: turfHelpers.FeatureCollection<turfHelpers.LineString>
+}
+
+export async function matchLines(outFile, params, lines, flags) {
+  let matchResult = await matchLinesMem(params, lines, flags);
+
+  for (let [propName, result] of Object.entries(matchResult)) {
+    let filename = `${outFile}.${propName}.geojson`;
+    console.log(chalk.bold.keyword('blue')('  ✏️  Writing ' + result.features.length + ' matched edges: ' + filename));
+    writeFileSync(filename, JSON.stringify(result));
+  }
+}
+
+export async function matchLinesMem(params, lines, flags) {
 
   var cleanedlines = new CleanedLines(lines);
   
@@ -943,26 +959,19 @@ async function matchLines(outFile, params, lines, flags) {
   }
   bar1.stop();
 
+  let result: MatchResult = {}
 
   if(matchedLines && matchedLines.length) {
-    console.log(chalk.bold.keyword('blue')('  ✏️  Writing ' + matchedLines.length + ' matched edges: ' + outFile + ".matched.geojson"));
-    var matchedFeatureCollection:turfHelpers.FeatureCollection<turfHelpers.LineString> = turfHelpers.featureCollection(matchedLines);
-    var matchedJsonOut = JSON.stringify(matchedFeatureCollection);
-    writeFileSync(outFile + ".matched.geojson", matchedJsonOut);
+    result.matched = turfHelpers.featureCollection(matchedLines);
   }
 
   if(unmatchedLines && unmatchedLines.length ) {
-    console.log(chalk.bold.keyword('blue')('  ✏️  Writing ' + unmatchedLines.length + ' unmatched lines: ' + outFile + ".unmatched.geojson"));
-    var unmatchedFeatureCollection:turfHelpers.FeatureCollection<turfHelpers.LineString> = turfHelpers.featureCollection(unmatchedLines);
-    var unmatchedJsonOut = JSON.stringify(unmatchedFeatureCollection);
-    writeFileSync(outFile + ".unmatched.geojson", unmatchedJsonOut);
+    result.unmatched = turfHelpers.featureCollection(unmatchedLines);
   }
 
   if(cleanedlines.invalid && cleanedlines.invalid.length ) {
-    console.log(chalk.bold.keyword('blue')('  ✏️  Writing ' + cleanedlines.invalid + ' in lines: ' + outFile + ".invalid.geojson"));
-    var invalidFeatureCollection:turfHelpers.FeatureCollection<turfHelpers.LineString> = turfHelpers.featureCollection(cleanedlines.invalid);
-    var invalidJsonOut = JSON.stringify(invalidFeatureCollection);
-    writeFileSync(outFile + ".unmatched.geojson", invalidJsonOut);
+    result.invalid = turfHelpers.featureCollection(cleanedlines.invalid);
   }
 
+  return result;
 }

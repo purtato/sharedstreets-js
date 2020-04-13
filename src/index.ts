@@ -16,6 +16,7 @@ import { isArray } from "util";
 export { Graph, PathCandidate, GraphMode, ReferenceSideOfStreet} from './graph'
 export { TileIndex } from './tile_index'
 export { TilePathGroup, TilePath, TilePathParams, TileType } from './tiles'
+export { matchLines, matchLinesMem } from './commands/match'
 
 /**
  * Shared Streets Java implementation
