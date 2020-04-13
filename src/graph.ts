@@ -394,7 +394,13 @@ export class LevelDB {
     db;
 
     constructor(directory) {
-        this.db = levelup(leveldown(directory));
+        console.log("LEVELUPPER")
+        try {
+            this.db = levelup(leveldown(directory));
+        } catch (e) {
+            console.log("LEVELCATCHER")
+        }
+        console.log("LEVELDOWNER2")
     }
 
     async get(key:string):Promise<any> {
@@ -419,6 +425,10 @@ export class LevelDB {
         catch(error) {
             return null;
         }
+    }
+
+    async close() {
+        return this.db.close()
     }
 }
 
@@ -479,6 +489,12 @@ export class Graph {
 
         // create id from tile path hash  
         this.id = uuidHash(this.graphMode + ' node-pair.sv1 ' + paths.join(" "));
+    }
+
+    async cleanup() {
+        if (this.db) {
+            await this.db.close();
+        }
     }
 
     async createGraphXml() {

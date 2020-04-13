@@ -958,6 +958,7 @@ export async function matchLinesMem(params, lines, flags) {
     bar1.increment();
   }
   bar1.stop();
+  await matcher.cleanup();
 
   let result: MatchResult = {}
 
