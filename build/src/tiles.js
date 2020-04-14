@@ -33,7 +33,7 @@ const DEFAULT_ZLEVEL = 12;
 const SHST_ID_API_URL = 'https://api.sharedstreets.io/v0.1.0/id/';
 const SHST_TILE_URL = 'https://tiles.sharedstreets.io/';
 const USE_LOCAL_CACHE = true;
-const SHST_TILE_CACHE_DIR = util_1.resolveHome('~/.shst/cache/tiles/');
+const SHST_TILE_CACHE_DIR = util_1.resolveHome('/tmp/shst/cache/tiles/');
 var TileType;
 (function (TileType) {
     TileType["REFERENCE"] = "reference";
